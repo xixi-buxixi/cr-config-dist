@@ -1,0 +1,124 @@
+{
+  "format": "cr-config-sign/v1",
+  "alg": "ed25519",
+  "canon": "json-sorted-keys/v1",
+  "keyFingerprint": "18d02ca95bbe00e064d1b1726ed99191",
+  "sig": "sYYYb0YuA0VmZ8KckCFacCaezc01AKd+iH9U4i6N4y7lOI3fuflcE5QnoNq1uX72Qe7lB+K7NjYzgYRauYnADQ==",
+  "data": {
+    "schemaVersion": 1,
+    "sites": {
+      "deepseek": {
+        "dataVersion": 1,
+        "chains": {
+          "assistantContent": [
+            {
+              "tier": "css",
+              "sel": ".ds-assistant-message-main-content"
+            }
+          ],
+          "thinkContent": [
+            {
+              "tier": "css",
+              "sel": ".ds-think-content"
+            }
+          ],
+          "messageContainer": [
+            {
+              "tier": "css",
+              "sel": "[class*=\"message\"]",
+              "anchor": "parentElement"
+            }
+          ],
+          "userMessage": [
+            {
+              "tier": "css",
+              "sel": "[class*=\"user\"], .ds-message:not(:has(.ds-assistant-message-main-content))"
+            }
+          ],
+          "input": [
+            {
+              "tier": "css",
+              "sel": "textarea"
+            },
+            {
+              "tier": "css",
+              "sel": "[contenteditable=\"true\"]"
+            }
+          ],
+          "sendButton": [
+            {
+              "tier": "topo",
+              "from": "input",
+              "maxUp": 6,
+              "levelChecks": [
+                {
+                  "kind": "css",
+                  "sel": "button, [role=\"button\"], div[class*=\"button\"]",
+                  "filters": [
+                    "excludeContainsFrom",
+                    "excludeStopState",
+                    "excludeStopAncestorInScope",
+                    "minSize14"
+                  ],
+                  "pool": {
+                    "preferIconOnly": true,
+                    "pick": "last"
+                  }
+                }
+              ]
+            }
+          ],
+          "stopState": [
+            {
+              "tier": "topo",
+              "from": "input",
+              "maxUp": 6,
+              "levelChecks": [
+                {
+                  "kind": "css",
+                  "sel": "[class*=\"stop\"]",
+                  "filters": [
+                    "excludeContainsFrom"
+                  ]
+                },
+                {
+                  "kind": "svgPathPrefix",
+                  "sel": ".ds-button--primary svg path",
+                  "closestSel": ".ds-button--primary",
+                  "prefix": "M2 4.88",
+                  "filters": [
+                    "excludeContainsFrom"
+                  ]
+                }
+              ]
+            }
+          ],
+          "actionBar": [
+            {
+              "tier": "css",
+              "sel": "[class*=\"iconLabelTertiary\"], [class*=\"action\"], [class*=\"toolbar\"]"
+            }
+          ],
+          "conversationId": [
+            {
+              "tier": "text",
+              "source": "url",
+              "part": "pathname",
+              "pattern": "/a/chat/s/([0-9a-zA-Z-]+)"
+            }
+          ],
+          "continueHint": [
+            {
+              "tier": "text",
+              "sel": "button, [role=\"button\"]",
+              "pattern": "继续生成",
+              "source": "textContent"
+            }
+          ],
+          "busyBubble": [],
+          "widgetMount": []
+        }
+      }
+    }
+  }
+}
