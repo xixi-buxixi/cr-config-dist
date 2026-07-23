@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI 回答交叉审查 · 隐私说明</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.7; }
+    body { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { line-height: 1.25; }
+    h2 { margin-top: 2em; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #9996; padding: 8px 10px; text-align: left; vertical-align: top; }
+    .muted { opacity: .72; }
+  </style>
+</head>
+<body>
+  <h1>AI 回答交叉审查 · 隐私说明</h1>
+  <p class="muted">生效日期：2026 年 7 月 23 日</p>
+
+  <h2>概述</h2>
+  <p>“AI 回答交叉审查”是一款在用户浏览器中运行的扩展。它按照用户的操作，从一个受支持的 AI 网页读取待检查的问答，将审查请求发送到用户选择并已登录的另一家 AI 服务，再把审查结果显示回原网页。</p>
+  <p><strong>开发者不运营用于接收问答、审查结果或使用记录的服务器，不出售数据，不投放广告，也不进行跨用户追踪。</strong></p>
+
+  <h2>处理的数据及用途</h2>
+  <table>
+    <thead><tr><th>数据</th><th>用途</th><th>去向</th></tr></thead>
+    <tbody>
+      <tr><td>用户选择检查的提问、AI 回答及完成审查所需的有限上下文</td><td>装配审查请求并取得交叉审查结果</td><td>用户选择的审查方 AI 网页；可能保存在用户在该服务中的会话记录里</td></tr>
+      <tr><td>审查方返回的回答与解析结论</td><td>生成提示灯、审查卡片、重审和用户主动导出的历史文件</td><td>仅在浏览器会话内处理；用户主动导出时写入本机文件</td></tr>
+      <tr><td>配对、档位、自动审查开关、运行方式等设置</td><td>记住用户选择</td><td>浏览器扩展本地存储</td></tr>
+      <tr><td>站点结构特征、失败环节、适配器版本等诊断数据</td><td>本地识别站点改版；在用户点击复制时帮助排障</td><td>默认仅保存在本机；复制诊断信息不含问答或审查原文</td></tr>
+    </tbody>
+  </table>
+
+  <h2>何时发送</h2>
+  <p>手动模式下，只有用户点击“检查”并选择审查方后才会发送。自动审查、自动复检和回注直接发送均为可选功能，默认关闭；用户主动开启时，扩展会在界面中说明发送对象和行为，用户可以随时关闭。</p>
+
+  <h2>第三方服务</h2>
+  <p>问答只会发送到用户选择的受支持 AI 服务。第三方如何保存、使用或删除其会话数据，受用户与相应服务之间的账号设置、服务条款和隐私政策约束。扩展不会取得或上传用户的账号密码、Cookie 或认证令牌。</p>
+
+  <h2>识别配置更新（远程签名配置）</h2>
+  <p>为在 AI 网站改版后尽快恢复交叉审查能力，扩展会按需（以及每日一次低频兜底）向两个固定地址拉取一份带数字签名的识别配置数据（页面元素选择器等纯结构特征）。关于这一行为：</p>
+  <ul>
+    <li>拉取是<strong>无参数的 GET 请求，不携带任何身份标识、会话内容或使用记录</strong>；暴露面等价于浏览器自身的扩展更新检查。</li>
+    <li>固定地址为 <code>dev.guxiaoquan.com</code>（开发者自有服务器，该地址不记录访问日志）与 <code>xixi-buxixi.github.io</code>（GitHub Pages 镜像）。</li>
+    <li>下发内容只包含纯识别数据，经 Ed25519 签名校验、格式白名单校验与版本单调校验后才会生效；任何一步不通过即整包丢弃、沿用现有配置。配置永不包含可执行代码。</li>
+    <li>此行为不改变本扩展的基本姿态：<strong>问答内容不上传，只在用户选择的 AI 网页之间流转</strong>。</li>
+  </ul>
+
+  <h2>本地存储与保留</h2>
+  <ul>
+    <li>进行中任务和审查记录存放在浏览器会话存储中，浏览器关闭后清空。</li>
+    <li>为避免存储写满，已完成记录最多保留最近 200 条且不超过 48 小时。</li>
+    <li>配对、功能开关和站点结构特征保存在扩展本地存储中，供后续使用。</li>
+    <li>卸载扩展会由浏览器删除该扩展的本地存储。设置页也提供按站清除学习数据等控制。</li>
+  </ul>
+
+  <h2>权限用途</h2>
+  <ul>
+    <li><code>storage</code>：保存任务状态和用户设置。</li>
+    <li><code>alarms</code>：在扩展后台休眠后恢复超时、扫描和排队任务。</li>
+    <li><code>scripting</code>：在需要网页主执行环境的受支持站点完成输入操作。</li>
+    <li><code>tabs</code>：查找用户已经打开的审查方页面，并在用户要求时跳转或返回。</li>
+    <li><code>notifications</code>：当原页面已关闭或不在前台时通知审查结果或停滞状态。</li>
+    <li><code>webRequest</code>：只观察受支持 AI 站点上特定请求的完成/失败信号，以判断页面回答是否完成；不读取请求体或响应内容。</li>
+    <li><code>favicon</code>：在多审查方界面显示相应站点的标签页图标。</li>
+    <li>站点访问权限：只在清单列出的 DeepSeek、Kimi、豆包、Gemini、ChatGPT 和 Claude 网页上提供产品功能。</li>
+    <li>配置源访问权限：仅向 <code>dev.guxiaoquan.com</code> 与 <code>xixi-buxixi.github.io</code> 的固定地址发起无参数 GET 拉取签名识别配置（见上节），不向其发送任何用户数据。</li>
+  </ul>
+
+  <h2>用户控制</h2>
+  <p>用户可以关闭自动功能、更改或清除审查方配对、清除本地学习数据、导出当前浏览器会话内的审查记录，或随时卸载扩展。要删除已经发送到某家 AI 服务的会话内容，请使用该服务提供的会话删除或账号数据控制功能。</p>
+
+  <h2>变更与联系</h2>
+  <p>隐私说明会随扩展的数据处理行为发生实质变化时更新。问题或反馈请通过扩展商店详情页列出的开发者支持联系方式提交。</p>
+</body>
+</html>
